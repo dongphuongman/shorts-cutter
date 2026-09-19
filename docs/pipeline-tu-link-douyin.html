@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Từ link Douyin đến bài đăng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground:      #FAFAF6;
+    --raised:      #FFFFFF;
+    --sunk:        #F1F2EC;
+    --ink:         #191C18;
+    --ink-soft:    #4A5048;
+    --ink-faint:   #7B8178;
+    --rule:        #DEE0D6;
+    --rule-soft:   #EAEBE3;
+    --accent:      #1E6F5C;
+    --accent-soft: #E2EFEA;
+    --danger:      #A33F28;
+    --danger-soft: #F7E7E2;
+    --amber:       #8A6410;
+    --amber-soft:  #F6EEDA;
+
+    --display: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif;
+    --body:    'Lora', Georgia, 'Times New Roman', serif;
+    --mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#14170F; --raised:#1C2019; --sunk:#232720;
+      --ink:#E9EBE2; --ink-soft:#B2B8AB; --ink-faint:#838A7C;
+      --rule:#333930; --rule-soft:#272C24;
+      --accent:#5FBC9E; --accent-soft:#1E2F28;
+      --danger:#E0836A; --danger-soft:#33211B;
+      --amber:#D9AE55; --amber-soft:#2E2617;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#14170F; --raised:#1C2019; --sunk:#232720;
+    --ink:#E9EBE2; --ink-soft:#B2B8AB; --ink-faint:#838A7C;
+    --rule:#333930; --rule-soft:#272C24;
+    --accent:#5FBC9E; --accent-soft:#1E2F28;
+    --danger:#E0836A; --danger-soft:#33211B;
+    --amber:#D9AE55; --amber-soft:#2E2617;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16.5px;
+    line-height: 1.68;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 0 72px;
+  }
+
+  /* ---------- masthead ---------- */
+  .mast { padding-block: 56px 32px; border-bottom: 2px solid var(--ink); display: grid; gap: 16px; }
+  .eyebrow {
+    font-family: var(--display); font-size: .72rem; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+  }
+  h1 {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3.05rem); line-height: 1.08;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .standfirst { font-size: 1.08rem; color: var(--ink-soft); max-width: 62ch; margin: 0; }
+
+  .entry {
+    font-family: var(--mono); font-size: .82rem;
+    background: var(--sunk); border-left: 2px solid var(--accent);
+    padding: 11px 14px; margin-top: 6px; overflow-x: auto;
+    white-space: nowrap; color: var(--ink);
+  }
+
+  /* ---------- flow strip ---------- */
+  .flow {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding-block: 28px 4px; font-family: var(--mono); font-size: .68rem;
+  }
+  .flow a {
+    text-decoration: none; color: var(--ink-soft);
+    background: var(--sunk); border: 1px solid var(--rule);
+    padding: 5px 9px; white-space: nowrap;
+  }
+  .flow a:hover, .flow a:focus-visible { color: var(--accent); border-color: var(--accent); }
+  .flow span { color: var(--ink-faint); align-self: center; }
+
+  main { display: grid; gap: clamp(1.6rem, 4vw, 2.3rem); padding-top: 26px; }
+
+  /* ---------- stages ---------- */
+  section { display: grid; gap: 15px; scroll-margin-top: 20px; }
+  .stage-head {
+    display: grid; grid-template-columns: auto 1fr; gap: 16px;
+    align-items: baseline; border-top: 1px solid var(--rule); padding-top: 18px;
+  }
+  .stage-num {
+    font-family: var(--mono); font-size: .78rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .04em; padding-top: 6px;
+  }
+  h2 {
+    font-family: var(--display); font-weight: 600;
+    font-size: clamp(1.3rem, 3.2vw, 1.68rem); line-height: 1.22;
+    letter-spacing: -.012em; margin: 0; text-wrap: balance;
+  }
+  h3 { font-family: var(--display); font-weight: 600; font-size: 1.01rem; margin: 9px 0 0; }
+  p { margin: 0; max-width: 68ch; }
+  main ul { margin: 0; padding-left: 1.15em; max-width: 68ch; display: grid; gap: 6px; }
+  strong { font-weight: 600; }
+  code {
+    font-family: var(--mono); font-size: .86em; background: var(--sunk);
+    padding: 1px 5px; border-radius: 3px; color: var(--ink);
+  }
+
+  /* ---------- artifact chain ---------- */
+  .io {
+    display: grid; gap: 8px; grid-template-columns: 1fr;
+    font-family: var(--mono); font-size: .73rem;
+    background: var(--sunk); padding: 11px 13px; border: 1px solid var(--rule-soft);
+  }
+  @media (min-width: 620px) { .io { grid-template-columns: 1fr 1fr; gap: 8px 22px; } }
+  .io div { display: flex; gap: 8px; min-width: 0; }
+  .io b {
+    color: var(--ink-faint); font-weight: 400; flex: 0 0 auto;
+    letter-spacing: .06em; text-transform: uppercase; font-size: .62rem;
+    padding-top: 3px;
+  }
+  .io span { color: var(--ink); word-break: break-all; }
+  .io .ckpt span { color: var(--accent); }
+
+  /* ---------- tables ---------- */
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table {
+    border-collapse: collapse; width: 100%; min-width: 440px;
+    font-family: var(--display); font-size: .86rem;
+  }
+  caption {
+    caption-side: top; text-align: left; font-family: var(--mono);
+    font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-faint); padding-bottom: 8px;
+  }
+  th {
+    text-align: left; font-weight: 600; font-size: .72rem; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-faint);
+    border-bottom: 1px solid var(--ink); padding: 0 12px 7px 0; white-space: nowrap;
+  }
+  td {
+    padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top; color: var(--ink-soft);
+  }
+  td:first-child { color: var(--ink); font-weight: 500; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  pre {
+    font-family: var(--mono); font-size: .79rem; line-height: 1.66;
+    background: var(--sunk); border: 1px solid var(--rule-soft);
+    border-left: 2px solid var(--accent); padding: 14px 16px; margin: 0;
+    overflow-x: auto; color: var(--ink); tab-size: 2;
+  }
+  pre .c { color: var(--ink-faint); }
+
+  /* ---------- callouts ---------- */
+  .trap, .note {
+    padding: 14px 17px; display: grid; gap: 6px; max-width: 72ch;
+  }
+  .trap { background: var(--danger-soft); border-left: 3px solid var(--danger); }
+  .note { background: var(--amber-soft); border-left: 3px solid var(--amber); }
+  .trap .tag, .note .tag {
+    font-family: var(--mono); font-size: .67rem; letter-spacing: .1em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .trap .tag { color: var(--danger); }
+  .note .tag { color: var(--amber); }
+  .trap p, .note p { font-size: .93rem; max-width: none; }
+
+  /* ---------- fork (two paths) ---------- */
+  .fork { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .fork { grid-template-columns: 1fr 1fr; } }
+  .path {
+    border: 1px solid var(--rule); background: var(--raised);
+    padding: 14px 15px; display: grid; gap: 6px;
+  }
+  .path h4 { font-family: var(--display); font-size: .93rem; font-weight: 600; margin: 0; }
+  .path .when {
+    font-family: var(--mono); font-size: .66rem; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .path p { font-size: .86rem; color: var(--ink-soft); max-width: none; }
+
+  footer {
+    border-top: 1px solid var(--rule); margin-top: 16px; padding-top: 20px;
+    font-family: var(--mono); font-size: .72rem; color: var(--ink-faint); line-height: 1.8;
+  }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+<style>
+  :root { color-scheme: light dark; }
+  html { -webkit-text-size-adjust: 100%; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="mast">
+    <div class="eyebrow">douyin2vietsub · kênh Hồ Sơ Tự Nhiên</div>
+    <h1>Từ link Douyin đến bài đăng</h1>
+    <p class="standfirst">Bảy chặng một video đi qua: tải, nhận dạng, dịch, lồng tiếng, dựng, sinh SEO, đăng. Mỗi chặng ghi một artifact xuống đĩa và tự bỏ qua nếu artifact đó đã có.</p>
+    <div class="entry">$ d2v video https://www.douyin.com/video/7686042064798223670 -c channels/hosotunhien.yaml</div>
+  </header>
+
+  <nav class="flow" aria-label="Các chặng">
+    <a href="#tai">1 tải</a><span>→</span>
+    <a href="#asr">2 nhận dạng</a><span>→</span>
+    <a href="#dich">3 dịch</a><span>→</span>
+    <a href="#tts">4 lồng tiếng</a><span>→</span>
+    <a href="#render">5 dựng</a><span>→</span>
+    <a href="#seo">6 SEO</a><span>→</span>
+    <a href="#dang">7 đăng</a>
+  </nav>
+
+  <main>
+
+    <section>
+      <p>Toàn bộ pipeline là một chuỗi checkpoint trên đĩa. Chạy lại cùng một link thì mỗi chặng thấy artifact của mình đã tồn tại và trả về ngay — không tải lại, không gọi lại API tính tiền. Đây là lý do có thể ngắt giữa chừng rồi chạy tiếp mà không mất gì.</p>
+      <p>Trạng thái nằm ở <code>state.hosotunhien.json</code>, khoá theo <code>video_id</code>, có file <code>.lock</code> đi kèm.</p>
+
+      <div class="note">
+        <span class="tag">Xác định video_id trước mọi thứ</span>
+        <p>ID lấy từ URL nếu có (<code>aweme_id</code>). Với link rút gọn <code>v.douyin.com</code> thì URL không mang ID, lúc đó mới lấy ID mà bước tải đọc được sau chuyển hướng. Giữ ID ổn định là bắt buộc — cache, state và tên thành phẩm đều tra theo nó, đổi giữa chừng là lần chạy sau trượt hết.</p>
+      </div>
+    </section>
+
+    <section id="tai">
+      <div class="stage-head"><div class="stage-num">01</div><h2>Tải video</h2></div>
+      <div class="io">
+        <div><b>vào</b><span>URL Douyin</span></div>
+        <div class="ckpt"><b>ra</b><span>work/hosotunhien/raw/&lt;id&gt;.mp4</span></div>
+      </div>
+
+      <p>Thử <code>yt-dlp</code> trước. Với Douyin thì gần như luôn thất bại, và khi đó mở trình duyệt thật để tra link phát.</p>
+
+      <div class="trap">
+        <span class="tag">Vì sao phải mở trình duyệt</span>
+        <p>Mọi endpoint trả <code>play_addr</code> đều đòi tham số ký <code>a_bogus</code>. <strong>Đây không phải chuyện cookie.</strong> Đo được: <code>web/aweme/detail</code> trả 403, <code>iteminfo</code> trả body rỗng, yt-dlp với cookie lấy thẳng từ Chrome vẫn 403. Tự dựng lại <code>a_bogus</code> là tự dựng lại cơ chế chống bot — nên thay vào đó mở trang, để trang tự ký, rồi bắt kết quả.</p>
+      </div>
+
+      <div class="fork">
+        <div class="path">
+          <span class="when">đường 1 · trong trang</span>
+          <h4>Gọi API detail từ bên trong trang</h4>
+          <p>Cùng gốc nên lớp bọc XHR của chính Douyin ký hộ. Được thì có <code>play_addr.uri</code> thật — thứ bền, ghép vào endpoint là tải được lúc nào cũng được, không hết hạn theo phiên. Thất bại lặng lẽ là chuyện bình thường, Douyin đổi endpoint liên tục.</p>
+        </div>
+        <div class="path">
+          <span class="when">đường 2 · xương sống</span>
+          <h4>Bắt request media trình phát tự bắn</h4>
+          <p>Luôn có nếu video phát được. Cho URL CDN đã ký sẵn nhưng có hạn dùng. Đây mới là đường chính, đường 1 chỉ là phần thưởng.</p>
+        </div>
+      </div>
+
+      <p>Hồ sơ trình duyệt bền nằm ở <code>~/.d2v/browser-profile</code>. Gặp captcha thì giải tay <strong>một lần</strong> bằng <code>d2v-agent resolve-uri &lt;url&gt; --headed</code>, cookie ở lại đó và các lượt sau tự dùng lại. Cần extra: <code>pip install -e '.[resolve]'</code>.</p>
+      <p>Bước này báo kèm kích thước file, để phát hiện ngay ca "tải xong mà ra file rỗng" thay vì chạy tới ASR mới vỡ lẽ.</p>
+    </section>
+
+    <section id="asr">
+      <div class="stage-head"><div class="stage-num">02</div><h2>Nhận dạng lời</h2></div>
+      <div class="io">
+        <div><b>vào</b><span>raw/&lt;id&gt;.mp4</span></div>
+        <div class="ckpt"><b>ra</b><span>work/hosotunhien/cues/&lt;id&gt;.json</span></div>
+      </div>
+
+      <p>Chặng này <strong>không</strong> gọi LLM, nên không tốn tiền dịch. Nó chép lời, cắt câu, và chấm chất lượng.</p>
+
+      <div class="scroll-x">
+        <table>
+          <caption>Nhà cung cấp ASR</caption>
+          <thead><tr><th>Provider</th><th>Giá</th><th>Ghi chú</th></tr></thead>
+          <tbody>
+            <tr><td>groq</td><td class="num">miễn phí 8 giờ/ngày</td><td>Mặc định. <code>whisper-large-v3-turbo</code>. Trả phí 0,04 USD/giờ</td></tr>
+            <tr><td>openai</td><td class="num">0,36 USD/giờ</td><td>Đắt hơn Groq ~9 lần</td></tr>
+            <tr><td>local</td><td class="num">0</td><td><code>faster-whisper</code>, chỉ nên dùng khi có GPU NVIDIA</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Đường cloud <strong>không</strong> tách WAV trung gian — ffmpeg đọc thẳng mp4 và nén sang Opus. WAV 16kHz mono chính là artifact tạm nặng nhất, khoảng 1,9 MB cho mỗi phút video. Chỉ đường <code>local</code> mới cần WAV.</p>
+
+      <h3>Cắt câu</h3>
+      <div class="scroll-x">
+        <table>
+          <thead><tr><th>Tham số</th><th class="num">Mặc định</th><th>Ý nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td>max_chars_source</td><td class="num">30</td><td>Trần ký tự mỗi dòng tiếng Hán</td></tr>
+            <tr><td>max_duration</td><td class="num">6,0 s</td><td>Trần thời lượng một dòng</td></tr>
+            <tr><td>pause_threshold</td><td class="num">0,55 s</td><td>Khoảng lặng đủ để tách dòng</td></tr>
+            <tr><td>micro_pause</td><td class="num">0,12 s</td><td>Khe hở nhỏ, dùng khi buộc phải cắt</td></tr>
+            <tr><td>hard_width_ratio</td><td class="num">1,45</td><td>Hệ số cho phép vượt trần trước khi cắt cứng</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Sau khi cắt: làm sạch chữ, rồi áp <code>asr.fixups</code> — bảng sửa những chỗ Whisper nghe nhầm lặp lại, khai trong config.</p>
+
+      <div class="trap">
+        <span class="tag">Lọc rác trước khi dịch</span>
+        <p>Whisper gặp video ít thoại — nhạc nền, tiếng xào nấu — thì <strong>bịa ra</strong> credits phụ đề. Phải lọc ở đây, trước bước dịch. Lọt sang bước dịch thì vừa tốn tiền API, vừa biến rác thành câu tiếng Việt trông hoàn toàn hợp lệ, không cách nào chặn được nữa.</p>
+      </div>
+
+      <p>Cuối chặng, <code>quality.assess</code> chấm và ghi <code>quality_ok</code> vào state. Kết luận này quyết định video có được <strong>tự động</strong> đăng hay không ở chặng 7.</p>
+    </section>
+
+    <section id="dich">
+      <div class="stage-head"><div class="stage-num">03</div><h2>Dịch sang tiếng Việt</h2></div>
+      <div class="io">
+        <div><b>vào</b><span>cues/&lt;id&gt;.json</span></div>
+        <div class="ckpt"><b>ra</b><span>work/hosotunhien/srt/&lt;id&gt;.vi.srt</span></div>
+      </div>
+
+      <p><strong>Đây là chặng tốn tiền.</strong> Nó có hai lớp checkpoint lồng nhau, không tranh nhau:</p>
+      <ul>
+        <li><code>.vi.srt</code> — checkpoint ngoài, chặn cả cặp bước đắt tiền cho đường CLI</li>
+        <li><code>cues.json</code> — checkpoint trong, để <code>translate --force</code> của agent vẫn rẻ</li>
+        <li>File dịch dở — ghi sau mỗi lô, sập giữa chừng thì lượt sau lấy lại phần đã trả tiền</li>
+      </ul>
+
+      <p>Các dòng ngắn được <strong>gộp lại</strong> trước khi gửi LLM (trần 14 giây hoặc 110 ký tự) để model có đủ ngữ cảnh, rồi <strong>chia lại</strong> theo ranh giới câu tiếng Việt chứ không theo ranh giới cue gốc.</p>
+
+      <div class="note">
+        <span class="tag">Chia lại, không rút gọn</span>
+        <p>Khi còn chia lại thì bỏ bước rút gọn. Rút gọn là để LLM viết lại cho ngắn — tức làm mất chữ. Chia thì vừa vừa khung vừa giữ đủ nội dung. Chế độ song ngữ thì tắt chia lại, vì nó cần khớp đúng từng dòng gốc với từng dòng dịch.</p>
+      </div>
+
+      <p><code>--force</code> xoá file dịch dở trước khi chạy. Không xoá thì mọi lô đều bị bỏ qua và <code>--force</code> thành lệnh không làm gì.</p>
+    </section>
+
+    <section id="tts">
+      <div class="stage-head"><div class="stage-num">04</div><h2>Lồng tiếng Việt</h2></div>
+      <div class="io">
+        <div><b>vào</b><span>&lt;id&gt;.vi.srt (bản đã chia lại)</span></div>
+        <div class="ckpt"><b>ra</b><span>work/hosotunhien/&lt;id&gt;/voiceover.wav</span></div>
+      </div>
+
+      <p>Giọng đọc phải khớp vào đúng khe thời gian của từng dòng phụ đề. Đó là ràng buộc quyết định chọn engine nào.</p>
+
+      <div class="fork">
+        <div class="path">
+          <span class="when">edge</span>
+          <h4>edge-tts qua mạng Microsoft</h4>
+          <p>Không tốn đĩa, không tốn CPU. Nhưng chỉ có 2 giọng Việt, <strong>không điều khiển được độ dài</strong>, và endpoint thỉnh thoảng trả file rỗng.</p>
+        </div>
+        <div class="path">
+          <span class="when">vieneu</span>
+          <h4>VieNeu-TTS chạy cục bộ trên CPU</h4>
+          <p>Nặng ~1 GB kể cả model, nạp mất ~20 giây. Đổi lại có nhân bản giọng và tham số <code>speed</code> can thiệp vào độ dài <strong>trước</strong> khi sinh sóng âm.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="tag">Vì sao speed đáng giá</span>
+        <p>edge-tts không cho điều khiển độ dài, nên phải nén sóng đã sinh xong bằng <code>atempo</code> — và atempo để lại artifact, đó chính là thứ làm giọng nghe máy móc. VieNeu chia thẳng vào độ dài model dự đoán, nên câu ngắn lại mà không méo tiếng.</p>
+      </div>
+
+      <p>Chặng này dùng bản cue <strong>đã chia lại</strong>, không phải bản gốc — giọng đọc ngắt theo đúng dòng phụ đề, nên dòng cụt giữa câu là nghe ra ngay. Đây là chỗ việc chia lại ở chặng 3 đáng giá nhất.</p>
+      <p>Đây cũng là chặng CPU đắt nhất: một lệnh ffmpeg cho <strong>mỗi</strong> dòng phụ đề, chạy tuần tự. Cache kiểm theo thời gian sửa của <code>.srt</code> và cues, mới hơn thì mới dựng lại.</p>
+    </section>
+
+    <section id="render">
+      <div class="stage-head"><div class="stage-num">05</div><h2>Dựng video thành phẩm</h2></div>
+      <div class="io">
+        <div><b>vào</b><span>raw mp4 + srt + voiceover.wav</span></div>
+        <div class="ckpt"><b>ra</b><span>output/hosotunhien/&lt;tiêu-đề&gt;_&lt;id&gt;_tts.mp4</span></div>
+      </div>
+
+      <p><code>output_mode</code> quyết định xuất gì: <code>sub</code> chỉ phụ đề, <code>tts</code> lồng tiếng, <code>both</code> cả hai file, <code>none</code> chỉ ghi phụ đề ra đĩa mà không xuất video. <code>none</code> là ca hợp lệ, không phải thất bại.</p>
+
+      <div class="scroll-x">
+        <table>
+          <caption>Tham số dựng</caption>
+          <thead><tr><th>Khoá</th><th class="num">Giá trị</th><th>Vì sao</th></tr></thead>
+          <tbody>
+            <tr><td>crop_bottom</td><td class="num">0,13</td><td>Dải phụ đề tiếng Trung ghi chết ở đáy — đo được 140px trên khung 1920×1080</td></tr>
+            <tr><td>crop_right</td><td class="num">0,05</td><td>Dải chữ cảnh báo dọc bên phải — 100px</td></tr>
+            <tr><td>crf</td><td class="num">23</td><td>crf 20 trên nguồn 4K HEVC 35 phút cho ra file &gt;4 GB và render hơn 2 tiếng</td></tr>
+            <tr><td>preset</td><td class="num">medium</td><td>Render mất 0,8–1,0 lần thời lượng, tới ~1,5 lần khi chạy song song</td></tr>
+            <tr><td>format</td><td class="num">original</td><td><code>reels</code> cho ra 1080×1920 nền mờ; <code>original</code> giữ khung ngang</td></tr>
+            <tr><td>ffmpeg_timeout</td><td class="num">1800 s</td><td>Nhân hệ số 4,0 theo thời lượng cho phim dài</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trap">
+        <span class="tag">Crop phải chạy trước khi ghép khung</span>
+        <p>Cắt rìa <strong>trước</strong> bước nhét vào khung dọc. Làm ngược lại thì dải chữ Trung đã bị phóng vào giữa khung rồi, cắt nữa là cắt vào nội dung. Khai bằng <strong>tỷ lệ</strong> chứ không phải pixel, vì nguồn có đủ cỡ từ 1286×576 tới 3840×2160.</p>
+      </div>
+
+      <p>Cỡ chữ phụ đề tự tính theo chiều cao khung: 8 cho khung dọc 1920, 15 cho khung ngang 1080. Cùng một con số cho ra chữ bé hơn hẳn ở chế độ ngang.</p>
+      <p>Sau khi dựng xong, <code>auto_clean</code> xoá artifact tạm — audio trích, mảnh TTS, voiceover. Video gốc và <code>.srt</code> vẫn giữ để chạy lại không phải làm lại từ đầu.</p>
+    </section>
+
+    <section id="seo">
+      <div class="stage-head"><div class="stage-num">06</div><h2>Sinh tiêu đề, mô tả, tag</h2></div>
+      <div class="io">
+        <div><b>vào</b><span>bản dịch tiếng Việt</span></div>
+        <div class="ckpt"><b>ra</b><span>work/hosotunhien/meta/&lt;id&gt;.json</span></div>
+      </div>
+
+      <p>Chặng này đặt <strong>sau</strong> bước dịch, và đó là điểm mấu chốt: nó đọc chính bản dịch tiếng Việt, nên mô tả nói đúng nội dung video chứ không phải dịch lại tiêu đề Douyin.</p>
+
+      <div class="note">
+        <span class="tag">Ranh giới cố ý</span>
+        <p>LLM chỉ lo phần <strong>ngữ nghĩa</strong>: tiêu đề, đoạn dẫn, nhãn chương, tag. Mọi ràng buộc <strong>cơ học</strong> của nền tảng — 100 ký tự tiêu đề, 500 ký tự cho toàn bộ tag cộng lại, chương phải bắt đầu 00:00 và cách nhau tối thiểu 10 giây — do code ép, không nhờ model nhớ. Model quên một luật là bài đăng hỏng lặng lẽ.</p>
+      </div>
+
+      <p>File meta chứa <code>title</code>, <code>hook</code>, <code>description</code>, <code>tags</code>, <code>chapters</code> và bản caption riêng cho Facebook. Trường <code>chapters</code> có nhãn kèm mốc thời gian — chính là thứ khâu cắt Shorts dùng để đặt tên từng clip.</p>
+      <p><code>seo.enabled: false</code> chặn đường chạy trọn, nhưng gọi tay <code>d2v-agent seo</code> thì vẫn chạy vì đó là yêu cầu tường minh.</p>
+    </section>
+
+    <section id="dang">
+      <div class="stage-head"><div class="stage-num">07</div><h2>Đăng lên nền tảng</h2></div>
+      <div class="io">
+        <div><b>vào</b><span>mp4 thành phẩm + meta.json</span></div>
+        <div class="ckpt"><b>ra</b><span>state.published = {youtube, facebook}</span></div>
+      </div>
+
+      <h3>Cửa chất lượng</h3>
+      <p>Video trượt <code>quality_ok</code> thì <strong>vẫn dựng, chỉ không tự đăng</strong>. Muốn đăng vẫn được, nhưng phải gọi lệnh publish riêng — tức là một hành động tường minh của người dùng.</p>
+
+      <div class="trap">
+        <span class="tag">Chống đăng trùng</span>
+        <p>State chỉ ghi <code>published</code> <strong>sau khi</strong> đăng xong, nên hai lệnh gọi nối nhau không thấy nhau — gọi publish hai lần cho cùng một video là ra hai bài giống hệt trên Page, mỗi bài tốn một lượt tải vài trăm MB. Nên phải chốt cả hai phía: đã xong (<code>published</code>) và đang chạy (<code>publishing</code>, kèm mốc thời gian để phát hiện lượt treo).</p>
+      </div>
+
+      <h3>Facebook có hai đường đăng video</h3>
+      <div class="scroll-x">
+        <table>
+          <thead><tr><th>Chế độ</th><th>Endpoint</th><th>Giới hạn</th></tr></thead>
+          <tbody>
+            <tr><td>reels</td><td class="num">/{page}/video_reels</td><td>Chặn cứng 3–90 giây. Không có nháp</td></tr>
+            <tr><td>video</td><td class="num">/{page}/videos</td><td>Nhận video dài, có nháp. Cần thêm <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_show_list</code></td></tr>
+            <tr><td>auto</td><td class="num">—</td><td>Chọn theo thời lượng. Gần như luôn là thứ đúng</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trap">
+        <span class="tag">Facebook báo thành công quá sớm</span>
+        <p>Facebook trả success ngay khi <strong>nhận xong file</strong>, nhưng đó mới là pha đầu trong ba pha: <code>uploading → processing → publishing</code>. Bài vẫn hỏng được ở pha xử lý — sai độ phân giải, lỗi codec, đối soát bản quyền — <em>sau khi</em> ta đã báo đăng xong. Bật <code>wait_processing</code> để chờ qua pha đó rồi mới kết luận.</p>
+        <p>Nhưng <strong>hết giờ chờ không phải là hỏng</strong>. File đã lên rồi, chỉ là Facebook xử lý lâu. Báo hỏng lúc đó sẽ khiến người gọi đăng lại và ra hai bài trùng nhau.</p>
+      </div>
+
+      <h3>Scope YouTube</h3>
+      <p><code>youtube.upload</code> chỉ đủ để <strong>tải lên</strong>. Đổi chế độ riêng tư là <code>videos.update</code>, Google không nhận scope upload cho lệnh đó.</p>
+      <p>Thêm scope thì token cũ <strong>không</strong> tự nâng: thư viện nhận danh sách mình truyền vào mà không đối chiếu với quyền đã cấp thật, nên nó refresh trót lọt rồi mới 403 ở lệnh đầu tiên cần quyền mới. Vì vậy có bước phát hiện lệch scope ngay lúc nạp token, không để lộ ra muộn.</p>
+
+      <div class="trap">
+        <span class="tag">Thứ tự ưu tiên tiêu đề rất dễ đảo ngược</span>
+        <p>Đường CLI dùng <code>meta.title or title</code> — SEO thắng khuôn mẫu. Hàm publish dùng <code>title or meta.title</code> — tham số truyền tay thắng SEO. Truyền thẳng tiêu đề khuôn mẫu vào publish là <strong>âm thầm hạ cấp tiêu đề của mọi bài đăng</strong>, và không test nào bắt được. Nên chỉ truyền khuôn mẫu khi SEO hỏng.</p>
+      </div>
+
+      <h3>Ba thói quen giữ tài khoản</h3>
+      <ul>
+        <li><strong>Kiểm tra trước khi chạy</strong> — xác thực toàn bộ nền tảng ngay từ đầu. Xử lý 20 video mất 3 tiếng rồi mới phát hiện token hết hạn là mất trắng.</li>
+        <li><strong>Giãn cách ngẫu nhiên</strong> — 120–420 giây giữa các lần đăng. Đăng đều tăm tắp là mẫu hành vi bot rõ nhất.</li>
+        <li><strong>Trần số lượng</strong> — <code>max_per_run: 5</code>. Dừng chủ động trước khi nền tảng bắt dừng.</li>
+      </ul>
+      <p>Đã đăng hôm qua <strong>không</strong> phải là thất bại. Coi nó là lỗi thì màn hình in "Thất bại" cho một video mà mọi thứ đều xong xuôi.</p>
+    </section>
+
+    <section id="sau">
+      <div class="stage-head"><div class="stage-num">→</div><h2>Sau pipeline: cắt Shorts</h2></div>
+      <p>Video dài đã xong nằm ở <code>output/hosotunhien/</code>. Bộ <code>shorts-cutter</code> lấy từ đó cắt thành Shorts dọc và hẹn giờ đăng — đó là một quy trình riêng, có tài liệu riêng.</p>
+      <div class="note">
+        <span class="tag">Lưu ý khi nối hai quy trình</span>
+        <p><code>shorts-cutter</code> đọc <strong>thành phẩm</strong>, không đọc video gốc. Mọi dấu vết nguồn còn sót trong thành phẩm sẽ theo sang Shorts. Đặc biệt: <code>crop_bottom</code> chỉ áp cho những video được dựng <em>sau</em> khi khoá đó được thêm vào config — video dựng trước đó vẫn còn nguyên phụ đề tiếng Trung.</p>
+      </div>
+    </section>
+
+    <section id="lenh">
+      <div class="stage-head"><div class="stage-num">—</div><h2>Lệnh tham chiếu</h2></div>
+<pre><span class="c"># một video</span>
+d2v video &lt;url&gt; -c channels/hosotunhien.yaml
+
+<span class="c"># quét cả tài khoản Douyin (cần cookies_douyin.txt)</span>
+d2v account &lt;url&gt;
+
+<span class="c"># nhiều link trong một file</span>
+d2v batch links.txt
+
+<span class="c"># chỉ lấy phụ đề, không dựng video</span>
+d2v srt &lt;url&gt;
+
+<span class="c"># dựng lại từ artifact đã có</span>
+d2v render
+d2v reel                      <span class="c"># cắt khúc hook thành video dọc</span>
+
+<span class="c"># kiểm tra cấu hình và token TRƯỚC khi chạy lô lớn</span>
+d2v check
+
+<span class="c"># dọn artifact tạm</span>
+d2v clean --help
+
+<span class="c"># giải captcha một lần, cookie ở lại browser-profile</span>
+d2v-agent resolve-uri &lt;url&gt; --headed</pre>
+
+      <p>Biến môi trường cần có: <code>GROQ_API_KEY</code> cho ASR, <code>FB_PAGE_TOKEN</code> cho Facebook. YouTube dùng <code>client_secrets.json</code> và <code>yt_token.hosotunhien.json</code>.</p>
+    </section>
+
+    <section id="artifact">
+      <div class="stage-head"><div class="stage-num">—</div><h2>Chuỗi artifact</h2></div>
+      <p>Mỗi chặng tự bỏ qua nếu artifact của nó đã tồn tại. Muốn chạy lại một chặng thì xoá artifact tương ứng, hoặc dùng <code>--force</code>.</p>
+      <div class="scroll-x">
+        <table>
+          <thead><tr><th>Chặng</th><th>Artifact</th><th>Xoá đi thì</th></tr></thead>
+          <tbody>
+            <tr><td>1 tải</td><td class="num">raw/&lt;id&gt;.mp4</td><td>Tải lại, có thể phải giải captcha</td></tr>
+            <tr><td>2 nhận dạng</td><td class="num">cues/&lt;id&gt;.json</td><td>Chép lời lại, tốn hạn mức ASR</td></tr>
+            <tr><td>3 dịch</td><td class="num">srt/&lt;id&gt;.vi.srt</td><td>Dịch lại — <strong>tốn tiền LLM</strong></td></tr>
+            <tr><td>4 lồng tiếng</td><td class="num">&lt;id&gt;/voiceover.wav</td><td>Tổng hợp lại, tốn CPU nhiều nhất</td></tr>
+            <tr><td>5 dựng</td><td class="num">output/…_tts.mp4</td><td>Render lại, 0,8–1,5 lần thời lượng video</td></tr>
+            <tr><td>6 SEO</td><td class="num">meta/&lt;id&gt;.json</td><td>Sinh lại, tốn một lượt LLM</td></tr>
+            <tr><td>7 đăng</td><td class="num">state.published</td><td><strong>Đăng trùng.</strong> Không xoá khoá này</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      Nguồn: core/run.py · core/steps.py · core/resolve.py · core/tts.py · core/seo.py · core/publish.py<br>
+      Cấu hình kênh: channels/hosotunhien.yaml · State: state.hosotunhien.json<br>
+      Cập nhật 19/09/2026
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

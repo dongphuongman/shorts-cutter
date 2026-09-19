@@ -1,0 +1,17 @@
+{
+  "youtube": {
+    "client_id": "DIEN_VAO.apps.googleusercontent.com",
+    "client_secret": "DIEN_VAO",
+    "category_id": 15
+  },
+  "facebook": {
+    "page_id": "DIEN_PAGE_ID",
+    "page_access_token": "DIEN_PAGE_ACCESS_TOKEN",
+    "graph_version": "v23.0"
+  },
+  "defaults": {
+    "title": "{stem} - phan {i} #Shorts",
+    "description": "Xem tron bo tren kenh.\n\n#animals #wildlife #nature #dongvat #thiennhien",
+    "tags": ["animals", "wildlife", "nature", "dong vat", "thien nhien"]
+  }
+}

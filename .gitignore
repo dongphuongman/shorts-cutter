@@ -1,0 +1,11 @@
+*.log
+*_shorts/
+.DS_Store
+.tokens.json
+__pycache__/
+clips/
+config.json
+posted.json
+queue.json
+upload_log.json
+yt_quota.json

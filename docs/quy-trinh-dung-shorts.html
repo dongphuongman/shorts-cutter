@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quy trình dựng Shorts — Hồ Sơ Tự Nhiên</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground:      #FAFAF6;
+    --raised:      #FFFFFF;
+    --sunk:        #F1F2EC;
+    --ink:         #191C18;
+    --ink-soft:    #4A5048;
+    --ink-faint:   #7B8178;
+    --rule:        #DEE0D6;
+    --rule-soft:   #EAEBE3;
+    --accent:      #1E6F5C;
+    --accent-soft: #E2EFEA;
+    --danger:      #A33F28;
+    --danger-soft: #F7E7E2;
+    --amber:       #8A6410;
+    --amber-soft:  #F6EEDA;
+
+    --display: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif;
+    --body:    'Lora', Georgia, 'Times New Roman', serif;
+    --mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --step: clamp(1.6rem, 4vw, 2.4rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #14170F;
+      --raised:      #1C2019;
+      --sunk:        #232720;
+      --ink:         #E9EBE2;
+      --ink-soft:    #B2B8AB;
+      --ink-faint:   #838A7C;
+      --rule:        #333930;
+      --rule-soft:   #272C24;
+      --accent:      #5FBC9E;
+      --accent-soft: #1E2F28;
+      --danger:      #E0836A;
+      --danger-soft: #33211B;
+      --amber:       #D9AE55;
+      --amber-soft:  #2E2617;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:      #14170F;
+    --raised:      #1C2019;
+    --sunk:        #232720;
+    --ink:         #E9EBE2;
+    --ink-soft:    #B2B8AB;
+    --ink-faint:   #838A7C;
+    --rule:        #333930;
+    --rule-soft:   #272C24;
+    --accent:      #5FBC9E;
+    --accent-soft: #1E2F28;
+    --danger:      #E0836A;
+    --danger-soft: #33211B;
+    --amber:       #D9AE55;
+    --amber-soft:  #2E2617;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16.5px;
+    line-height: 1.68;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 0 72px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .mast {
+    padding-block: 56px 36px;
+    border-bottom: 2px solid var(--ink);
+    display: grid;
+    gap: 18px;
+  }
+  .eyebrow {
+    font-family: var(--display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .standfirst {
+    font-size: 1.08rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    padding-top: 6px;
+  }
+  .meta-row b { color: var(--ink-soft); font-weight: 500; }
+
+  /* ---------- layout ---------- */
+
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 40px;
+  }
+  @media (min-width: 900px) {
+    .cols { grid-template-columns: 190px minmax(0, 1fr); gap: 56px; }
+    nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 28px); align-self: start; }
+  }
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    font-family: var(--display);
+    font-size: 0.82rem;
+  }
+  @media (min-width: 900px) { nav.toc ol { flex-direction: column; gap: 2px; } }
+  nav.toc a {
+    color: var(--ink-faint);
+    text-decoration: none;
+    display: block;
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
+  }
+  nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main { min-width: 0; display: grid; gap: var(--step); }
+
+  /* ---------- stages ---------- */
+
+  section { display: grid; gap: 16px; scroll-margin-top: 24px; }
+
+  .stage-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+  }
+  .stage-num {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    padding-top: 6px;
+  }
+  h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.32rem, 3.2vw, 1.72rem);
+    line-height: 1.22;
+    letter-spacing: -0.012em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.02rem;
+    margin: 10px 0 0;
+    color: var(--ink);
+  }
+  p { margin: 0; max-width: 68ch; }
+  p + p { margin-top: -2px; }
+  main ul { margin: 0; padding-left: 1.15em; max-width: 68ch; display: grid; gap: 6px; }
+  strong { font-weight: 600; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--sunk);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  /* ---------- tables ---------- */
+
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 420px;
+    font-family: var(--display);
+    font-size: 0.86rem;
+  }
+  caption {
+    caption-side: top;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-bottom: 8px;
+  }
+  th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--ink);
+    padding: 0 12px 7px 0;
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 12px 9px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+    color: var(--ink-soft);
+  }
+  td:first-child { color: var(--ink); font-weight: 500; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* ---------- code block ---------- */
+
+  pre {
+    font-family: var(--mono);
+    font-size: 0.79rem;
+    line-height: 1.66;
+    background: var(--sunk);
+    border: 1px solid var(--rule-soft);
+    border-left: 2px solid var(--accent);
+    padding: 14px 16px;
+    margin: 0;
+    overflow-x: auto;
+    color: var(--ink);
+    tab-size: 2;
+  }
+  pre .c { color: var(--ink-faint); }
+
+  /* ---------- trap callout ---------- */
+
+  .trap {
+    background: var(--danger-soft);
+    border-left: 3px solid var(--danger);
+    padding: 15px 18px;
+    display: grid;
+    gap: 7px;
+    max-width: 72ch;
+  }
+  .trap .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--danger);
+    font-weight: 500;
+  }
+  .trap p { font-size: 0.94rem; max-width: none; }
+  .note {
+    background: var(--amber-soft);
+    border-left: 3px solid var(--amber);
+    padding: 15px 18px;
+    display: grid;
+    gap: 7px;
+    max-width: 72ch;
+  }
+  .note .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 500;
+  }
+  .note p { font-size: 0.94rem; max-width: none; }
+
+  /* ---------- energy profile chart ---------- */
+
+  .charts {
+    display: grid;
+    gap: 26px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) { .charts { grid-template-columns: 1fr 1fr; gap: 30px; } }
+
+  .chart { display: grid; gap: 10px; min-width: 0; }
+  .chart-title {
+    font-family: var(--display);
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+  .chart-title span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+    padding-top: 2px;
+  }
+  .rows { display: grid; gap: 2px; }
+  .row {
+    display: grid;
+    grid-template-columns: 2.9em 1fr;
+    align-items: center;
+    gap: 8px;
+  }
+  .row .y {
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .track { background: var(--rule-soft); height: 9px; position: relative; }
+  .bar { height: 100%; background: var(--ink-faint); }
+  .bar.content { background: var(--accent); }
+  .bar.sub { background: var(--danger); }
+  .row.cut .y { color: var(--danger); font-weight: 500; }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--ink-faint);
+  }
+  .legend i { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: -1px; }
+  .legend i.a { background: var(--accent); }
+  .legend i.d { background: var(--danger); }
+  .legend i.n { background: var(--ink-faint); }
+
+  /* ---------- frame anatomy ---------- */
+
+  .anatomy {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  @media (min-width: 640px) { .anatomy { grid-template-columns: minmax(0, 260px) 1fr; gap: 24px; } }
+  .anatomy svg { width: 100%; height: auto; max-width: 100%; display: block; }
+  .anatomy dl { margin: 0; display: grid; gap: 11px; }
+  .anatomy dt {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  .anatomy dd { margin: 2px 0 0; font-size: 0.92rem; color: var(--ink-soft); }
+
+  /* ---------- layout comparison ---------- */
+
+  .opts { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 680px) { .opts { grid-template-columns: repeat(3, 1fr); } }
+  .opt {
+    border: 1px solid var(--rule);
+    padding: 14px 15px;
+    display: grid;
+    gap: 7px;
+    background: var(--raised);
+  }
+  .opt.picked { border-color: var(--accent); border-width: 2px; padding: 13px 14px; }
+  .opt h4 {
+    font-family: var(--display);
+    font-size: 0.94rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .opt .loss {
+    font-family: var(--mono);
+    font-size: 1.24rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .opt .loss small { font-size: 0.6rem; color: var(--ink-faint); letter-spacing: 0.06em; display: block; padding-top: 5px; text-transform: uppercase; font-family: var(--mono); }
+  .opt p { font-size: 0.86rem; color: var(--ink-soft); max-width: none; }
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ---------- schedule grid ---------- */
+
+  .slots { display: grid; gap: 10px; grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .slots { grid-template-columns: 1fr 1fr; } }
+  .slot {
+    border: 1px solid var(--rule);
+    padding: 13px 15px;
+    display: grid;
+    gap: 5px;
+    background: var(--raised);
+  }
+  .slot .plat { font-family: var(--display); font-weight: 600; font-size: 0.92rem; }
+  .slot .times { font-family: var(--mono); font-size: 0.94rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .slot .cap { font-size: 0.83rem; color: var(--ink-soft); }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 14px;
+    padding-top: 20px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    line-height: 1.8;
+  }
+
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+<style>
+  :root { color-scheme: light dark; }
+  html { -webkit-text-size-adjust: 100%; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="mast">
+    <div class="eyebrow">Hồ Sơ Tự Nhiên · shorts-cutter</div>
+    <h1>Quy trình dựng Shorts</h1>
+    <p class="standfirst">Cắt video tài liệu ngang có lồng tiếng Việt thành Shorts dọc 9:16, dò và loại dấu vết nguồn tiếng Trung, rồi hẹn giờ đăng lên YouTube và Facebook.</p>
+    <div class="meta-row">
+      <span><b>Kênh</b> @hosotunhien</span>
+      <span><b>Page</b> 1292439780625288</span>
+      <span><b>Thư mục</b> ~/Downloads/files/shorts-cutter</span>
+      <span><b>Cập nhật</b> 19/09/2026</span>
+    </div>
+  </header>
+
+  <div class="cols">
+
+    <nav class="toc" aria-label="Mục lục">
+      <ol>
+        <li><a href="#nguon">1 · Chọn nguồn</a></li>
+        <li><a href="#do">2 · Dò vùng cắt</a></li>
+        <li><a href="#doan">3 · Chọn đoạn</a></li>
+        <li><a href="#khung">4 · Dựng khung dọc</a></li>
+        <li><a href="#lich">5 · Hẹn giờ đăng</a></li>
+        <li><a href="#bay">Bẫy đã vấp</a></li>
+        <li><a href="#lenh">Lệnh tham chiếu</a></li>
+        <li><a href="#file">File trong dự án</a></li>
+      </ol>
+    </nav>
+
+    <main>
+
+      <section>
+        <p>Nguồn là video Douyin đã qua pipeline <code>douyin2vietsub</code>: tải về, nhận dạng lời, dịch, lồng tiếng Việt, ghi phụ đề. Thành phẩm nằm ở <code>output/hosotunhien/</code> — phim tài liệu ngang, dài 2–10 phút.</p>
+        <p>Bộ công cụ này lấy thành phẩm đó cắt thành Shorts. Nó <strong>không</strong> đọc video gốc, nên mọi dấu vết nguồn còn sót trong thành phẩm sẽ theo sang Shorts nếu không xử lý.</p>
+
+        <div class="note">
+          <span class="tag">Điều kiện tiên quyết</span>
+          <p>Toàn bộ vấn đề khó của quy trình này nằm ở một sự thật: <strong>nguồn Douyin ghi chết chữ tiếng Trung vào hình</strong> — phụ đề ở dải đáy, watermark kênh, dải chữ cảnh báo dọc bên phải, và đôi khi cả đồ hoạ giữa khung. <code>ffprobe</code> không báo bất kỳ thứ nào trong số đó.</p>
+        </div>
+      </section>
+
+      <section id="nguon">
+        <div class="stage-head">
+          <div class="stage-num">01</div>
+          <h2>Chọn nguồn — danh sách trắng đảo ngược</h2>
+        </div>
+        <p><code>exclude_sources.json</code> mặc định chứa <strong>mọi</strong> nguồn. Một nguồn chỉ được gỡ ra sau khi có người trích khung hình và nhìn tận mắt. Chưa soi thì không được dùng.</p>
+        <p>Cách này ngược với trực giác nhưng cần thiết: bốn lần lỗi lọt qua đều bắt đầu bằng việc tin rằng nguồn sạch vì không có dấu hiệu nào báo ngược lại.</p>
+
+        <div class="scroll-x">
+          <table>
+            <caption>Nguồn loại vĩnh viễn</caption>
+            <thead>
+              <tr><th>Nguồn</th><th>Lý do</th><th>Cứu được?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="num">7665372852459212058</td><td>Đồ hoạ chữ Trung giữa khung — thẻ tiêu đề, sơ đồ FCI/IHCC</td><td>Không</td></tr>
+              <tr><td class="num">7670893440074337571</td><td>Hoạt hình chữ Trung — 同渗透, 去淡水, nhãn ống nghiệm</td><td>Không</td></tr>
+              <tr><td class="num">7681657113810193704</td><td>Người Trung nói trước camera — khẩu hình không khớp lồng tiếng</td><td>Không</td></tr>
+              <tr><td class="num">7686042064798223670</td><td>Watermark 动物百科老七 giữa khung + logo CRUNCHLABS</td><td>Không</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Crop chỉ xử lý được dấu vết nằm ở <strong>rìa</strong> khung. Chữ hay logo nằm giữa khung thì không có cách nào ngoài loại cả nguồn.</p>
+      </section>
+
+      <section id="do">
+        <div class="stage-head">
+          <div class="stage-num">02</div>
+          <h2>Dò vùng cắt trên từng nguồn</h2>
+        </div>
+        <p><code>detect_band.py</code> lấy 7 khung rải đều video, hạ xuống 320px, chuyển xám, rồi tính <strong>năng lượng Laplacian theo từng hàng</strong> — đạo hàm bậc hai theo chiều ngang, trung bình trên cả hàng.</p>
+        <p>Chữ trắng nét viền đen cho đạo hàm bậc hai cao hơn hẳn nội dung xung quanh. Đó là dấu hiệu để tìm.</p>
+
+        <div class="charts">
+
+          <div class="chart">
+            <div class="chart-title">Nguồn ghép sẵn khung dọc<span>7665661830991269135 · 1080×1920</span></div>
+            <div class="rows">
+              <div class="row"><span class="y">0.00</span><div class="track"><div class="bar" style="width:1.2%"></div></div></div>
+              <div class="row"><span class="y">0.04</span><div class="track"><div class="bar" style="width:1.0%"></div></div></div>
+              <div class="row"><span class="y">0.08</span><div class="track"><div class="bar" style="width:1.1%"></div></div></div>
+              <div class="row"><span class="y">0.12</span><div class="track"><div class="bar" style="width:1.1%"></div></div></div>
+              <div class="row"><span class="y">0.16</span><div class="track"><div class="bar" style="width:1.0%"></div></div></div>
+              <div class="row"><span class="y">0.20</span><div class="track"><div class="bar" style="width:1.2%"></div></div></div>
+              <div class="row"><span class="y">0.24</span><div class="track"><div class="bar" style="width:1.3%"></div></div></div>
+              <div class="row"><span class="y">0.28</span><div class="track"><div class="bar" style="width:1.3%"></div></div></div>
+              <div class="row"><span class="y">0.32</span><div class="track"><div class="bar content" style="width:18.9%"></div></div></div>
+              <div class="row"><span class="y">0.36</span><div class="track"><div class="bar content" style="width:36.7%"></div></div></div>
+              <div class="row"><span class="y">0.40</span><div class="track"><div class="bar content" style="width:44.2%"></div></div></div>
+              <div class="row"><span class="y">0.44</span><div class="track"><div class="bar content" style="width:48.9%"></div></div></div>
+              <div class="row"><span class="y">0.49</span><div class="track"><div class="bar content" style="width:47.5%"></div></div></div>
+              <div class="row"><span class="y">0.53</span><div class="track"><div class="bar content" style="width:48.9%"></div></div></div>
+              <div class="row"><span class="y">0.57</span><div class="track"><div class="bar content" style="width:49.3%"></div></div></div>
+              <div class="row cut"><span class="y">0.61</span><div class="track"><div class="bar sub" style="width:100%"></div></div></div>
+              <div class="row"><span class="y">0.65</span><div class="track"><div class="bar" style="width:13.4%"></div></div></div>
+              <div class="row"><span class="y">0.69</span><div class="track"><div class="bar" style="width:1.3%"></div></div></div>
+              <div class="row"><span class="y">0.73</span><div class="track"><div class="bar" style="width:1.1%"></div></div></div>
+              <div class="row"><span class="y">0.77</span><div class="track"><div class="bar" style="width:0.9%"></div></div></div>
+              <div class="row"><span class="y">0.81</span><div class="track"><div class="bar" style="width:0.9%"></div></div></div>
+              <div class="row"><span class="y">0.85</span><div class="track"><div class="bar" style="width:1.1%"></div></div></div>
+              <div class="row"><span class="y">0.89</span><div class="track"><div class="bar" style="width:1.4%"></div></div></div>
+              <div class="row"><span class="y">0.93</span><div class="track"><div class="bar" style="width:1.1%"></div></div></div>
+              <div class="row"><span class="y">0.97</span><div class="track"><div class="bar" style="width:0.9%"></div></div></div>
+            </div>
+            <p style="font-size:.85rem;color:var(--ink-soft)">Nền mờ trên và dưới chỉ ~0.3. Nội dung thật 5–15. Phụ đề ở <strong>0.61</strong> vọt lên 29,5 — gấp đôi nội dung. Giữ lại <code>0.341 → 0.610</code>.</p>
+          </div>
+
+          <div class="chart">
+            <div class="chart-title">Nguồn ngang thuần<span>7673703209990425862 · 1920×1080</span></div>
+            <div class="rows">
+              <div class="row"><span class="y">0.00</span><div class="track"><div class="bar content" style="width:12.8%"></div></div></div>
+              <div class="row"><span class="y">0.04</span><div class="track"><div class="bar content" style="width:13.8%"></div></div></div>
+              <div class="row"><span class="y">0.08</span><div class="track"><div class="bar content" style="width:14.2%"></div></div></div>
+              <div class="row"><span class="y">0.12</span><div class="track"><div class="bar content" style="width:14.7%"></div></div></div>
+              <div class="row"><span class="y">0.16</span><div class="track"><div class="bar content" style="width:15.2%"></div></div></div>
+              <div class="row"><span class="y">0.19</span><div class="track"><div class="bar content" style="width:14.3%"></div></div></div>
+              <div class="row"><span class="y">0.23</span><div class="track"><div class="bar content" style="width:16.2%"></div></div></div>
+              <div class="row"><span class="y">0.27</span><div class="track"><div class="bar content" style="width:18.2%"></div></div></div>
+              <div class="row"><span class="y">0.31</span><div class="track"><div class="bar content" style="width:19.2%"></div></div></div>
+              <div class="row"><span class="y">0.35</span><div class="track"><div class="bar content" style="width:21.5%"></div></div></div>
+              <div class="row"><span class="y">0.39</span><div class="track"><div class="bar content" style="width:21.7%"></div></div></div>
+              <div class="row"><span class="y">0.43</span><div class="track"><div class="bar content" style="width:22.6%"></div></div></div>
+              <div class="row"><span class="y">0.47</span><div class="track"><div class="bar content" style="width:23.3%"></div></div></div>
+              <div class="row"><span class="y">0.51</span><div class="track"><div class="bar content" style="width:23.4%"></div></div></div>
+              <div class="row"><span class="y">0.54</span><div class="track"><div class="bar content" style="width:23.2%"></div></div></div>
+              <div class="row"><span class="y">0.58</span><div class="track"><div class="bar content" style="width:22.4%"></div></div></div>
+              <div class="row"><span class="y">0.62</span><div class="track"><div class="bar content" style="width:23.0%"></div></div></div>
+              <div class="row"><span class="y">0.66</span><div class="track"><div class="bar content" style="width:23.3%"></div></div></div>
+              <div class="row"><span class="y">0.70</span><div class="track"><div class="bar content" style="width:23.9%"></div></div></div>
+              <div class="row"><span class="y">0.74</span><div class="track"><div class="bar content" style="width:24.1%"></div></div></div>
+              <div class="row"><span class="y">0.78</span><div class="track"><div class="bar content" style="width:27.9%"></div></div></div>
+              <div class="row"><span class="y">0.82</span><div class="track"><div class="bar content" style="width:29.2%"></div></div></div>
+              <div class="row"><span class="y">0.86</span><div class="track"><div class="bar content" style="width:30.2%"></div></div></div>
+              <div class="row cut"><span class="y">0.89</span><div class="track"><div class="bar sub" style="width:100%"></div></div></div>
+              <div class="row"><span class="y">0.93</span><div class="track"><div class="bar sub" style="width:78.2%"></div></div></div>
+              <div class="row"><span class="y">0.97</span><div class="track"><div class="bar" style="width:31.3%"></div></div></div>
+            </div>
+            <p style="font-size:.85rem;color:var(--ink-soft)">Không có viền mờ — nội dung chiếm toàn khung, năng lượng đều 5–11. Phụ đề chiếm <strong>0.89–0.93</strong>, vọt lên 37. Giữ lại <code>0.072 → 0.882</code>.</p>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span><i class="n"></i>viền mờ / ngoài vùng</span>
+          <span><i class="a"></i>nội dung thật</span>
+          <span><i class="d"></i>dòng phụ đề</span>
+        </div>
+
+        <h3>Ngưỡng quyết định</h3>
+        <div class="scroll-x">
+          <table>
+            <thead><tr><th>Bước</th><th>Quy tắc</th><th>Vì sao</th></tr></thead>
+            <tbody>
+              <tr><td>Dải nội dung</td><td class="num">năng lượng &gt; 8% đỉnh</td><td>Tách nội dung khỏi viền mờ của nguồn ghép sẵn</td></tr>
+              <tr><td>Dòng phụ đề</td><td class="num">&gt; 1,6× trung vị, trong 45% dưới</td><td>Phụ đề luôn ở đáy dải nội dung, không ở giữa</td></tr>
+              <tr><td>Watermark</td><td class="num">&gt; 1,7× trung vị, vùng trái 32%</td><td>Watermark góc trên trái, crop phải không chạm tới</td></tr>
+              <tr><td>Cắt phải</td><td class="num">cố định 5%</td><td>Dải chữ cảnh báo dọc, vị trí ổn định</td></tr>
+              <tr><td>Dự phòng</td><td class="num">13% đáy dải nội dung</td><td>Khi không dò được đỉnh nào</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="trap">
+          <span class="tag">Quy tắc cốt lõi</span>
+          <p><strong>Không dò được không có nghĩa là sạch.</strong> Trên cảnh quay nhiều chi tiết — đá, nước, cỏ — trung vị năng lượng vốn đã cao nên chữ mảnh không vượt ngưỡng. Khi không thấy đỉnh nào, bộ dò lùi về con số 13% đã đo tay trong <code>channels/hosotunhien.yaml</code> thay vì kết luận nguồn sạch.</p>
+        </div>
+
+        <h3>Giải phẫu khung hình</h3>
+        <div class="anatomy">
+          <svg viewBox="0 0 200 116" role="img" aria-label="Sơ đồ khung hình nguồn với các vùng bị cắt">
+            <rect x="0" y="0" width="200" height="116" fill="var(--sunk)" stroke="var(--rule)" stroke-width="1"/>
+            <rect x="1" y="1" width="188" height="14" fill="var(--danger-soft)"/>
+            <rect x="1" y="15" width="188" height="86" fill="var(--accent-soft)"/>
+            <rect x="1" y="101" width="188" height="14" fill="var(--danger-soft)"/>
+            <rect x="189" y="1" width="10" height="114" fill="var(--danger-soft)"/>
+            <rect x="5" y="19" width="34" height="7" fill="var(--danger)" opacity="0.55"/>
+            <rect x="52" y="104" width="86" height="7" fill="var(--danger)" opacity="0.55"/>
+            <text x="95" y="62" fill="var(--accent)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">GIỮ LẠI</text>
+            <text x="6" y="11" fill="var(--danger)" font-family="JetBrains Mono, monospace" font-size="6">viền / watermark</text>
+            <text x="6" y="112" fill="var(--danger)" font-family="JetBrains Mono, monospace" font-size="6">phụ đề</text>
+          </svg>
+          <dl>
+            <div><dt>top</dt><dd>Mép trên dải nội dung. Lùi thêm nếu dò thấy watermark góc trên trái.</dd></div>
+            <div><dt>bottom</dt><dd>Ngay trên dòng phụ đề, trừ biên an toàn 1,2%.</dd></div>
+            <div><dt>right — 5%</dt><dd>Dải chữ cảnh báo dọc của Douyin.</dd></div>
+            <div><dt>Thứ tự</dt><dd>Cắt <strong>trước</strong> khi dựng khung dọc. Làm ngược lại thì dải chữ đã bị phóng vào giữa khung, cắt nữa là cắt vào nội dung.</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section id="doan">
+        <div class="stage-head">
+          <div class="stage-num">03</div>
+          <h2>Chọn đoạn đáng cắt</h2>
+        </div>
+        <p>Quét mọi cửa sổ 20–40 giây, bước 1 giây, chấm điểm bằng hai tín hiệu: <strong>thay đổi hình ảnh</strong> (bộ lọc <code>scdet</code>, lấy mẫu 4 khung/giây) và <strong>âm thanh</strong> (<code>ebur128</code>, độ lớn tức thời).</p>
+        <p>Mỗi chỉ số quy về thứ hạng phần trăm trước khi cộng, nên một cảnh nổ hình không lấn át toàn bộ thang điểm.</p>
+
+        <div class="scroll-x">
+          <table>
+            <caption>Trọng số chấm điểm</caption>
+            <thead><tr><th>Tín hiệu</th><th class="num">Trọng số</th><th>Bắt được gì</th></tr></thead>
+            <tbody>
+              <tr><td>Chuyển động trung bình</td><td class="num">0,34</td><td>Cảnh động, loại cảnh tĩnh</td></tr>
+              <tr><td>Biến thiên âm lượng</td><td class="num">0,30</td><td>Giọng lên xuống, có kịch tính</td></tr>
+              <tr><td>Đỉnh chuyển động</td><td class="num">0,22</td><td>Khoảnh khắc bùng nổ</td></tr>
+              <tr><td>Âm lượng trung bình</td><td class="num">0,14</td><td>Loại đoạn im lặng</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Đoạn dài gần 30 giây được cộng thêm tối đa 10% — vùng tốt nhất cho Shorts. Sau đó chọn tham lam theo điểm giảm dần, bỏ đoạn chồng nhau, cách nhau tối thiểu 3 giây.</p>
+        <p>Điểm bắt đầu được dịch về ngay sau một cú chuyển cảnh mạnh gần đó (trong ±2,5 giây) để clip không mở đầu giữa chừng một cảnh quay.</p>
+        <p>Tiêu đề lấy từ <code>work/hosotunhien/meta/&lt;id&gt;.json</code> — trường <code>chapters</code> có nhãn kèm mốc thời gian, nên mỗi clip được đặt tên theo đúng đoạn nội dung nó rơi vào, không phải đánh số vô nghĩa.</p>
+      </section>
+
+      <section id="khung">
+        <div class="stage-head">
+          <div class="stage-num">04</div>
+          <h2>Dựng khung dọc 9:16</h2>
+        </div>
+        <p>Nguồn 16:9 chuyển sang 9:16 thì <strong>bắt buộc mất khoảng 72% chiều ngang</strong>. Đây là hình học, không phải hạn chế của công cụ. Chỉ có ba cách xử lý phần thừa: để viền, làm mờ nhân đôi, hoặc cắt bỏ.</p>
+
+        <div class="opts">
+          <div class="opt">
+            <h4>Nền mờ</h4>
+            <div class="loss">0%<small>mất chiều ngang</small></div>
+            <p>Nền là chính nội dung phóng to làm mờ. Không mất gì, nhưng nội dung xuất hiện ba lần trên màn hình.</p>
+          </div>
+          <div class="opt picked">
+            <span class="badge">Đang dùng</span>
+            <h4>Nền tối + phóng 1,3</h4>
+            <div class="loss">11,5%<small>mỗi bên</small></div>
+            <p>Giữ nguyên tỷ lệ gốc, đặt trên nền tối đặc. Không vỡ khung hình, còn viền mỏng trên dưới.</p>
+          </div>
+          <div class="opt">
+            <h4>Lấp kín khung</h4>
+            <div class="loss">35,5%<small>mỗi bên</small></div>
+            <p>Phóng cho nội dung lấp kín. Giống Shorts gốc nhất, nhưng cảnh rộng thành cận cảnh và chủ thể lệch bị cắt.</p>
+          </div>
+        </div>
+
+        <p>Mức phóng 1,3 không phải con số tuỳ tiện — đó chính là <code>video.reel.zoom</code> trong <code>channels/hosotunhien.yaml</code>, mức pipeline gốc đã dùng cho reel.</p>
+
+        <h3>Bám theo chủ thể</h3>
+        <p><code>reframe.py</code> có sẵn nhưng chưa bật. Nó lấp kín khung mà không cắt cứng ở giữa: dựng bản đồ chú ý từ chuyển động cộng độ sắc nét, tính trọng tâm theo cột, làm mượt hai lần, giới hạn tốc độ lia, rồi xuất file <code>sendcmd</code> cho ffmpeg đổi <code>crop.x</code> theo thời gian.</p>
+        <p>Kết quả lấp kín thật và bám được chủ thể, nhưng vẫn chỉ giữ 29% chiều ngang — cảnh rộng vẫn thành cận cảnh. Với phim tài liệu thiên nhiên, đó là mất mát không chấp nhận được.</p>
+
+        <div class="note">
+          <span class="tag">Cách triệt để</span>
+          <p>Muốn Shorts lấp kín khung mà không mất gì thì phải lấy <strong>nguồn quay dọc sẵn</strong>. Phần lớn nội dung Douyin vốn là video dọc; 29 nguồn hiện có tình cờ đều là dạng phim tài liệu ngang. Sửa ở khâu chọn nguồn hiệu quả hơn mọi thủ thuật crop.</p>
+        </div>
+      </section>
+
+      <section id="lich">
+        <div class="stage-head">
+          <div class="stage-num">05</div>
+          <h2>Hẹn giờ đăng</h2>
+        </div>
+        <p>Dùng lịch hẹn giờ của <strong>chính nền tảng</strong>, không phải cron trên máy. Máy tắt vẫn đăng bình thường.</p>
+
+        <div class="slots">
+          <div class="slot">
+            <div class="plat">YouTube Shorts</div>
+            <div class="times">19:00</div>
+            <div class="cap">1 bài/ngày. <code>status.publishAt</code> đặt ngay trong lệnh <code>videos.insert</code>, nên scope <code>youtube.upload</code> là đủ.</div>
+          </div>
+          <div class="slot">
+            <div class="plat">Facebook Reels</div>
+            <div class="times">06:30 · 12:00 · 20:30</div>
+            <div class="cap">3 bài/ngày. <code>video_state=SCHEDULED</code> kèm <code>scheduled_publish_time</code>, tối thiểu 10 phút kể từ lúc gửi.</div>
+          </div>
+        </div>
+
+        <h3>Quota YouTube</h3>
+        <p>10.000 đơn vị/ngày chia cho 1.600 mỗi lần tải lên bằng <strong>6 video/ngày</strong>. Xoá video <strong>không</strong> hoàn lại quota.</p>
+        <p>Sổ đếm nằm ở <code>yt_quota.json</code>, tách riêng khỏi <code>posted.json</code> — vì khi phải cắt lại clip thì <code>posted.json</code> bị xoá, còn quota đã tiêu thì không quay lại. Đếm nhầm sẽ đâm vào giới hạn và ăn lỗi 403.</p>
+        <p>Slot YouTube bị hoãn vẫn chiếm clip trong hàng đợi, nên khi chỉ muốn đẩy một nền tảng thì dùng <code>--only</code>.</p>
+
+        <h3>Giới hạn của token</h3>
+        <p>Token hiện tại chỉ có scope <code>youtube.upload</code>. Đủ để tải lên và hẹn giờ, <strong>không</strong> đủ để đổi chế độ riêng tư hay xoá video sau khi đăng — cả hai đều cần <code>videos.update</code> / <code>videos.delete</code>. Muốn xoá thì phải vào YouTube Studio làm tay.</p>
+        <p>Facebook thì <code>FB_PAGE_TOKEN</code> là user token không hết hạn; Page token lấy qua <code>/me/accounts</code> mỗi lần chạy.</p>
+      </section>
+
+      <section id="bay">
+        <div class="stage-head">
+          <div class="stage-num">—</div>
+          <h2>Bẫy đã vấp</h2>
+        </div>
+        <p>Bốn lỗi dưới đây đều lọt qua ở lần đầu, đều cùng một gốc: tin vào chỉ số thay vì nhìn khung hình.</p>
+
+        <div class="trap">
+          <span class="tag">Lần 1 · phụ đề cháy vào hình</span>
+          <p>Bộ cắt đọc thẳng <code>output/hosotunhien/</code> nên bỏ qua bước crop mà pipeline đã cấu hình sẵn. 27 bài lên lịch với chữ Trung trên hình. Chính docstring trong <code>core/reel.py</code> đã cảnh báo đúng cái bẫy này.</p>
+        </div>
+        <div class="trap">
+          <span class="tag">Lần 2 · nguồn ghép sẵn khung dọc</span>
+          <p>Tỷ lệ cố định 13% đo trên khung ngang không chạm tới phụ đề của nguồn đã ghép thành khung dọc, vì ở đó phụ đề nằm ở <em>đáy dải nội dung</em> chứ không phải đáy khung.</p>
+        </div>
+        <div class="trap">
+          <span class="tag">Lần 3 · watermark góc trên trái</span>
+          <p>Crop phải 5% xử lý dải chữ dọc bên phải, nhưng watermark 科普新紀元 nằm bên <em>trái</em>. Phải dò riêng vùng trái 32%.</p>
+        </div>
+        <div class="trap">
+          <span class="tag">Lần 4 · dò trượt trên cảnh nhiều chi tiết</span>
+          <p>Nguồn quay đá và nước cho trung vị năng lượng cao, chữ mảnh không tạo đỉnh vượt ngưỡng. Bộ dò trả về "không có phụ đề" trong khi phụ đề vẫn còn nguyên.</p>
+        </div>
+
+        <h3>Hai lỗi lập lịch</h3>
+        <ul>
+          <li><code>assign()</code> ban đầu chỉ loại clip đã đăng mà không loại <strong>khung giờ</strong> đã dùng — chạy lại là đặt trùng giờ.</li>
+          <li>Tiêu đề bị cắt ở 100 ký tự <em>sau</em> khi nối hậu tố, làm <code>#Shorts</code> cụt thành <code>#S</code>. Phải cắt phần lõi trước rồi mới nối.</li>
+        </ul>
+
+        <h3>Quy tắc rút ra</h3>
+        <ul>
+          <li><strong>Soi khung hình trước khi đẩy.</strong> <code>ffprobe</code> không thấy chữ cháy vào hình, watermark, hay logo kênh khác.</li>
+          <li><strong>Nguồn chưa soi thì khoá.</strong> Danh sách trắng đảo ngược, không phải danh sách đen.</li>
+          <li><strong>Không dò được ≠ sạch.</strong> Luôn có sàn dự phòng.</li>
+          <li><strong>Phóng to làm lộ lỗi.</strong> Watermark mờ ở cỡ nhỏ trở nên rõ khi phóng 3,5×.</li>
+        </ul>
+      </section>
+
+      <section id="lenh">
+        <div class="stage-head">
+          <div class="stage-num">—</div>
+          <h2>Lệnh tham chiếu</h2>
+        </div>
+
+<pre><span class="c"># cắt clip từ nguồn trong danh sách trắng</span>
+python3 autopost.py build --days 7 --per-video 4
+
+<span class="c"># xem lịch dự kiến, không đăng gì</span>
+python3 autopost.py plan --days 8
+
+<span class="c"># đẩy lên và hẹn giờ</span>
+python3 autopost.py push --days 8
+python3 autopost.py push --days 8 --only youtube    <span class="c"># chỉ một nền tảng</span>
+python3 autopost.py push --days 8 --dry-run
+
+<span class="c"># xem đã đăng gì</span>
+python3 autopost.py status</pre>
+
+        <h3>Soi khung trước khi đẩy — bắt buộc</h3>
+<pre><span class="c"># trích một khung từ clip đã cắt</span>
+ffmpeg -ss 8 -i clips/XXX.mp4 -frames:v 1 -vf scale=300:533 /tmp/k.png
+
+<span class="c"># ghép nhiều khung thành một bảng để soi nhanh</span>
+ffmpeg -i a.png -i b.png -i c.png -filter_complex hstack=inputs=3 sheet.png</pre>
+        <p>Dùng <code>hstack</code> chứ không phải <code>tile</code> — <code>tile</code> chỉ nhận một luồng vào, ghép nhiều ảnh bằng nó sẽ chỉ ra ảnh đầu tiên.</p>
+
+        <h3>Kiểm tra trạng thái bài đã lên lịch</h3>
+<pre><span class="c"># Facebook: publish_status phải là "scheduled", matches_found phải là false</span>
+curl -s "https://graph.facebook.com/v21.0/&lt;video_id&gt;?fields=status,permalink_url&access_token=&lt;page_token&gt;"
+
+<span class="c"># YouTube: 403 nghĩa là riêng tư HOẶC đã xoá — không phân biệt được</span>
+curl -s "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=&lt;id&gt;&format=json"</pre>
+      </section>
+
+      <section id="file">
+        <div class="stage-head">
+          <div class="stage-num">—</div>
+          <h2>File trong dự án</h2>
+        </div>
+        <div class="scroll-x">
+          <table>
+            <thead><tr><th>File</th><th>Việc</th></tr></thead>
+            <tbody>
+              <tr><td>autopost.py</td><td>Điều phối toàn bộ. Đọc credential và metadata tiếng Việt thẳng từ <code>douyin2vietsub</code></td></tr>
+              <tr><td>detect_band.py</td><td>Dò dải nội dung, dòng phụ đề, watermark trên từng nguồn</td></tr>
+              <tr><td>cut_shorts.py</td><td>Chấm điểm chọn đoạn, render bốn kiểu bố cục</td></tr>
+              <tr><td>reframe.py</td><td>Bám chủ thể, lấp kín khung. Có sẵn, chưa bật</td></tr>
+              <tr><td>upload.py</td><td>Uploader độc lập cho dự án khác, không dùng trong luồng này</td></tr>
+              <tr><td>exclude_sources.json</td><td>Danh sách trắng đảo ngược — nguồn chưa soi thì nằm đây</td></tr>
+              <tr><td>queue.json</td><td>Hàng đợi clip kèm tiêu đề, mô tả, tag, điểm</td></tr>
+              <tr><td>posted.json</td><td>Bài đã lên lịch. Bị xoá khi phải cắt lại</td></tr>
+              <tr><td>yt_quota.json</td><td>Sổ quota YouTube theo ngày. Không bị xoá khi cắt lại</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>
+        Phụ thuộc: ffmpeg 9.0.1 · Python 3.14 · numpy · Pillow · requests<br>
+        Credential đọc từ ~/Downloads/files/douyin2vietsub_extracted/douyin2vietsub<br>
+        Múi giờ lịch đăng: Asia/Ho_Chi_Minh
+      </footer>
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
